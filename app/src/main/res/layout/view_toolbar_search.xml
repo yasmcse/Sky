@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/frame_layout_toolbar_custom_view"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="9dp"
+    android:padding="5dp">
+
+    <EditText xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/search_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:hint="@string/searchhint"
+        android:imeOptions="actionSearch|flagNoExtractUi"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textCursorDrawable="@null" />
+
+
+    <ImageView
+        android:id="@+id/clear_button"
+        android:layout_width="@dimen/grid_3x"
+        android:layout_height="@dimen/grid_3x"
+        style="@style/Widget.AppCompat.ActionButton"
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginRight="10dp"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_close" />
+
+</FrameLayout>

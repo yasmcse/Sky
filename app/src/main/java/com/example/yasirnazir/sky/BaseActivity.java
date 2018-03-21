@@ -1,0 +1,30 @@
+package com.example.yasirnazir.sky;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+import com.example.yasirnazir.sky.dependency_injection.DaggerDependencyInjector;
+import com.example.yasirnazir.sky.dependency_injection.DependencyInjector;
+import com.example.yasirnazir.sky.networking.NetworkModule;
+
+import java.io.File;
+
+/**
+ * Created by yasirnazir on 3/19/18.
+ */
+
+public class BaseActivity extends AppCompatActivity {
+    DependencyInjector deps;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        File cacheFile = new File(getCacheDir(), "responses");
+        deps = DaggerDependencyInjector.builder().networkModule(new NetworkModule(cacheFile)).build();
+
+    }
+
+    public DependencyInjector getDeps() {
+        return deps;
+    }
+}

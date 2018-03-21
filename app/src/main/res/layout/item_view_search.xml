@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.yasirnazir.sky.utils.view.SquareRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="-2dp">
+
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:clickable="false"
+            android:paddingBottom="@dimen/grid_1x"
+            android:paddingTop="@dimen/grid_1.5x">
+
+            <ImageView
+                android:id="@+id/icon_image_view"
+                android:layout_width="@dimen/grid_9x"
+                android:layout_height="@dimen/grid_9x"
+                android:layout_gravity="center_horizontal"
+                tools:src="@drawable/movies" />
+
+            <TextView
+                android:id="@+id/genre_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginTop="@dimen/grid_0.5x"
+                android:lines="2"
+                android:paddingLeft="@dimen/grid_2x"
+                android:paddingRight="@dimen/grid_2x"
+                android:textColor="@color/dark_text"
+                android:textSize="11sp" />
+        </FrameLayout>
+
+</com.example.yasirnazir.sky.utils.view.SquareRelativeLayout>
