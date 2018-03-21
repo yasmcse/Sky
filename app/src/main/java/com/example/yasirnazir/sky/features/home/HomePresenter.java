@@ -21,6 +21,7 @@ public class HomePresenter extends Presenter<HomePresenter.View> {
     NetworkService networkService;
 
     private HomeFetcher homeFetcher;
+    private List<Data> dataList;
 
     public HomePresenter(NetworkService networkService) {
         this.networkService = networkService;
@@ -34,7 +35,11 @@ public class HomePresenter extends Presenter<HomePresenter.View> {
         addSubscription(homeFetcher.observeErrors().subscribe(it -> {
             view.showError(it);
         }));
-        addSubscription(homeFetcher.observeData().subscribe(it -> view.displayMoviesData(it.getData())));
+        addSubscription(homeFetcher.observeData().subscribe(it -> {
+            view.displayMoviesData(it.getData());
+            dataList = it.getData();
+        }));
+        addSubscription(view.onSearchQuerySubmitIntent().subscribe(it -> view.performSearch(it,dataList)));
     }
 
 
@@ -50,6 +55,10 @@ public class HomePresenter extends Presenter<HomePresenter.View> {
         void showError(ApiError apiError);
 
         void displayMoviesData(List<Data> dataList);
+
+        Observable<String> onSearchQuerySubmitIntent();
+
+        void performSearch(String keywords,List<Data> dataList);
 
     }
 }

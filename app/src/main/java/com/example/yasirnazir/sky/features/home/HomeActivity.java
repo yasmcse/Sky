@@ -2,19 +2,20 @@ package com.example.yasirnazir.sky.features.home;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
+
 
 
 import com.example.yasirnazir.sky.BaseActivity;
@@ -25,6 +26,7 @@ import com.example.yasirnazir.sky.models.Data;
 import com.example.yasirnazir.sky.networking.NetworkService;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -54,15 +56,14 @@ public class HomeActivity extends BaseActivity implements HomePresenter.View {
     NetworkService networkService;
     private HomePresenter homePresenter;
     private SearchRecyclerAdapter searchRecyclerAdapter = new SearchRecyclerAdapter();
-    private final PublishSubject<Object> initiateSearchIntentEmitter = PublishSubject.create();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(getString(R.string.app_name));
         getDeps().inject(this);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        initSearchBar();
         setupRecyclerView();
         homePresenter = new HomePresenter(networkService);
         homePresenter.attach(this);
@@ -78,6 +79,50 @@ public class HomeActivity extends BaseActivity implements HomePresenter.View {
         recyclerView.setPadding(padding, padding, padding, padding);
     }
 
+    private void initSearchBar() {
+        setTitle(getString(R.string.app_name));
+        toolbar = findViewById(R.id.toolbar);
+        searchInputView = (EditText) findViewById(R.id.search_edit_text);
+        searchInputView.setOnFocusChangeListener((view, focused) -> {
+            if (focused) {
+                searchInputView.post(() -> {
+                    InputMethodManager imm = (InputMethodManager) toolbar.getContext().getSystemService(INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(searchInputView, SHOW_IMPLICIT);
+                });
+            }
+        });
+
+        searchInputView.setOnTouchListener((v, event) -> {
+            searchInputView.requestFocus();
+            return true;
+        });
+
+    }
+
+
+    @Override
+    public Observable<String> onSearchQuerySubmitIntent() {
+        return searchButtonClicks(searchInputView)
+                .map(event -> searchInputView.getText().toString())
+                .filter(query -> query.length() > 0);
+    }
+
+    @Override
+    public void performSearch(String keywords,List<Data> dataList) {
+        List<Data> filteredList = new ArrayList<>();
+
+        if(dataList != null){
+            for(Data item: dataList){
+                if(keywords.equalsIgnoreCase(item.getGenre()) || keywords.equalsIgnoreCase(item.getTitle())){
+                    filteredList.add(item);
+                }
+            }
+            searchRecyclerAdapter.setItems(filteredList);
+            searchRecyclerAdapter.notifyDataSetChanged();
+        }
+
+    }
+
 
 
     @Override
@@ -87,7 +132,7 @@ public class HomeActivity extends BaseActivity implements HomePresenter.View {
 
     @Override
     public void showError(ApiError apiError) {
-      showErrorMessage(apiError.getMessage());
+        showErrorMessage(apiError.getMessage());
     }
 
     private void showErrorMessage(String message) {

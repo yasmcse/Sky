@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">sky</string>
-    <string name= "searchhint">Search"></string>
+    <string name="search_hint">Search</string>
 </resources>
